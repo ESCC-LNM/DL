@@ -1,23 +1,21 @@
 # ESCC-LNM
 
-ESCC-LNM predicts metastasis in individual lymph nodes in esophageal squamous cell carcinoma (ESCC) from contrast-enhanced CT. ConvNeXt V2 Atto encodes 2.5D patches of each segmented node and its surrounding tissue. Radiomics features guide feature modulation and attention pooling.
+This PyTorch model uses contrast-enhanced CT to predict metastasis in individual lymph nodes in esophageal squamous cell carcinoma. A shared ConvNeXt V2 Atto encoder processes the node and surrounding tissue. A learned radiomics prior guides feature modulation and sparse attention pooling.
 
-## Performance
+## Quick start
 
-The retrospective study included 838 lymph nodes from 806 patients at three centers.
+Use Python 3.10 and install the PyTorch and torchvision builds for your hardware. From this directory, install the dependencies with `python -m pip install -r requirements.txt`.
 
-| Test cohort | Nodes | AUROC (95% CI) |
-| --- | ---: | --- |
-| Internal | 95 | 0.892 (0.824–0.960) |
-| External 1 (regional) | 288 | 0.881 (0.837–0.925) |
-| External 2 (supraclavicular) | 81 | 0.927 (0.864–0.990) |
+Copy `configs/default.json` to `configs/local.json` and set the paths to the prepared CT volumes, node masks, radiomics tables, existing folds and scalers, and ImageNet initialization weights. The input formats are described in the [data guide](docs/DATA.md). The initialization weights and attribution are listed in the [third-party notices](THIRD_PARTY_NOTICES.md).
 
-In an exploratory analysis of nine patients with matched TCIA and TCGA data, the highest predicted nodal risk per patient correlated positively with *GSTM2* and *GSTM4* expression.
+```bash
+python validate_data.py --config configs/local.json
+python train_cv.py --config configs/local.json
+python train_fulltrain.py --config configs/local.json
+```
 
-## Data access
+Fold validation determines the full-training duration. Pooled out-of-fold predictions determine the classification threshold. Full-train uses that threshold to evaluate a single model on the held-out cohorts and saves `model.pt`. Run `python evaluate.py --help` to use that checkpoint for a separate cohort.
 
-Clinical data are available from the corresponding author upon reasonable request and institutional review board approval.
+The manuscript describes five-fold probability averaging for held-out evaluation. Clinical data and weights are obtained separately.
 
-## Citation
-
-> Radiomics-prior-guided deep learning for node-level lymph node metastasis prediction in esophageal squamous cell carcinoma: exploratory radiogenomic associations with glutathione-mediated redox signaling. *Study manuscript*.
+Use only trusted checkpoints and scaler files. The pinned PyTorch release has a known checkpoint-loading vulnerability. [PyTorch advisory](https://github.com/pytorch/pytorch/security/advisories/GHSA-53q9-r3pm-6pq6)

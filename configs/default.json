@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "parameters": {
+    "seed": 42,
+    "epochs": 50,
+    "batch_size": 8,
+    "num_workers": 0,
+    "num_classes": 2,
+    "amp": true,
+    "pretrained": true,
+    "apply_aug": true,
+    "hu_min": null,
+    "hu_max": null,
+    "weight_avg": true,
+    "weight_avg_start_ratio": 0.7,
+    "weight_avg_min_count": 4,
+    "warmup_epochs": 3,
+    "lr": 0.0001,
+    "min_lr": 0.000001,
+    "weight_decay": 0.00005,
+    "backbone_lr_scale": 0.75,
+    "grad_clip": 5,
+    "patience": 10,
+    "label_smoothing": 0.01,
+    "freeze_backbone_epochs": 1,
+    "input_size": 48,
+    "aug_profile": "light",
+    "normalize_mode": "zscore",
+    "crop_margin": 6,
+    "context_margin": 18,
+    "num_centers": 7,
+    "center_step": 1,
+    "rad_hidden_dim_1": 128,
+    "rad_hidden_dim_2": 64,
+    "prior_dim": 128,
+    "num_prior_groups": 4,
+    "image_dropout": 0.1,
+    "prior_dropout": 0.1,
+    "shared_dim": 128,
+    "group_temperature": 0.85,
+    "prior_confidence_power": 1.25,
+    "mil_attn_dim": 128,
+    "mil_dropout": 0.1,
+    "tumor_mil_topk": 2,
+    "context_mil_topk": 4,
+    "tumor_mil_temperature": 0.7,
+    "context_mil_temperature": 0.9,
+    "mil_prior_conditioning": true,
+    "align_lambda": 0.05,
+    "group_entropy_lambda": 0.01,
+    "threshold_mode": "constrained_balanced",
+    "threshold_target_sens": 0.7,
+    "threshold_min_sens": 0.75,
+    "threshold_min_spec": 0.7,
+    "eval_tta_mode": "none",
+    "ensemble_mode": "uniform",
+    "ensemble_topk": 0
+  },
+  "paths": {
+    "protocol": "../data/cv_protocol/cross_validation_info.json",
+    "pretrained": "../weights/pytorch_model.bin",
+    "cv_output": "../outputs/cv",
+    "fulltrain_output": "../outputs/fulltrain"
+  },
+  "cohorts": {
+    "train": {
+      "table": "../data/train/features.csv",
+      "images": "../data/train/images",
+      "masks": "../data/train/masks"
+    },
+    "internal": {
+      "table": "../data/internal/features.csv",
+      "images": "../data/internal/images",
+      "masks": "../data/internal/masks"
+    },
+    "external1": {
+      "table": "../data/external1/features.csv",
+      "images": "../data/external1/images",
+      "masks": "../data/external1/masks"
+    },
+    "external2": {
+      "table": "../data/external2/features.csv",
+      "images": "../data/external2/images",
+      "masks": "../data/external2/masks"
+    }
+  }
+}
